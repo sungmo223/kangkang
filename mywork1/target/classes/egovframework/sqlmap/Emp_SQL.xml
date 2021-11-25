@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="empspace">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="empvo" type="egov.service.EmpVO"/>	
+
+	<select id = "empDAO.selectEmpList" resultClass="egovMap">
+		<![CDATA[
+		select a.* from (
+			select 
+				rownum rn, empno, ename, job, deptno, sal, comm, hiredate 
+			from emp ) a 
+		where rn >=#s_no# and rn <=#e_no#
+		]]>
+	</select>
+
+	<insert id="empDAO.insertEmp">
+		<![CDATA[
+		insert into emp(empno, ename, job, deptno, sal, hiredate)
+			values(#empno#, #ename#, #job#, #deptno#, #sal#, #hiredate#)
+		]]>
+	</insert>
+	
+	<select id="empDAO.selectEmpTotal" resultClass="java.lang.Integer">
+		<![CDATA[
+		select count(*) from emp
+		]]>
+	</select>
+	
+	<select id = "empDAO.selectEmpDetail" resultClass="empvo" >
+		<![CDATA[
+		select empno, ename, job, hiredate, sal, nvl(comm,0) comm, deptno from emp 
+			where empno = '$empno$'
+		]]>
+	</select>
+	
+	<update id = "empDAO.updateEmp">
+		<![CDATA[
+		update emp set
+			ename = #ename#, 
+			job = #job#, 
+			deptno = #deptno#, 
+			sal = #sal#, 
+			hiredate = #hiredate#
+		where empno = #empno#
+		]]>
+	
+	</update>
+	
+	<delete id="empDAO.deleteEmp">
+		<![CDATA[
+			DELETE FROM emp WHERE empno=#empno#
+		]]>
+	</delete>
+	
+	<select id = "empDAO.selectEmpEmpno" resultClass="java.lang.Integer">
+		<![CDATA[
+			select max(empno)+1 from emp
+		]]>
+	
+	</select>
+	
+	<select id="empDAO.selectEmpJobList" resultClass="egovMap">
+		<![CDATA[
+			select distinct(job) job  from emp
+					where job != 'PRESIDENT'
+		]]>
+	</select>
+	
+</sqlMap>

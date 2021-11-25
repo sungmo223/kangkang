@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+
+<sqlMap namespace="nboard_space">
+
+<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+<typeAlias  alias="nboardVO" type="egov.service.NBoardVO"/>	
+
+	<insert id="nboardDAO.insertNBoard">
+		<![CDATA[
+		INSERT INTO nboard( unq, 
+							title, 
+							pass, 
+							name, 
+							content, 
+							rdate, 
+							udate) VALUES 
+						(	nboard_seq.nextval, 
+							#title#, 
+							'1234', 
+							#name#, 
+							#content#,  
+							sysdate, 
+							sysdate)
+		]]>
+	</insert>
+
+	<select id="nboardDAO.selectNBoardList" resultClass="egovMap">
+		<![CDATA[
+		SELECT b.* from(
+			SELECT rownum rn, a.* from(
+				SELECT 	unq, 
+						title, 
+						name, 
+						content,
+						to_char(rdate,'yyyy/mm/dd') rdate, 
+						hits 
+				FROM nboard
+		]]>
+			<isNotNull property="s_text">
+				<isNotEmpty property="s_text">
+				
+				<isEqual property="s_field" compareValue="rdate">
+				WHERE to_char($s_field$,'yyyy/mm/dd') LIKE '%$s_text$%'				
+				</isEqual>
+				
+				<isNotEqual property="s_field" compareValue="rdate">
+				WHERE $s_field$ LIKE '%$s_text$%'
+				</isNotEqual>
+				
+				</isNotEmpty>
+			</isNotNull>
+		<![CDATA[
+				ORDER BY unq DESC )a )b
+		WHERE rn >=#s_no# and rn <=#e_no#
+		]]>
+	</select>
+
+	
+	<select id="nboardDAO.selectNBoardTotal" resultClass="java.lang.Integer">
+		<![CDATA[
+		SELECT count(*) FROM nboard 
+		]]>
+			<isNotNull property="s_text">
+				<isNotEmpty property="s_text">
+				
+				<isEqual property="s_field" compareValue="rdate">
+				WHERE to_char($s_field$,'yyyy/mm/dd') LIKE '%$s_text$%'				
+				</isEqual>
+				<isNotEqual property="s_field" compareValue="rdate">
+				WHERE $s_field$ LIKE '%$s_text$%'
+				</isNotEqual>
+				</isNotEmpty>
+			</isNotNull>
+		
+	</select>
+
+	<select id="nboardDAO.selectNBoardDetail" resultClass="nboardVO">
+			<![CDATA[
+			SELECT 	unq, 
+					title, 
+					name, 
+					content,
+					hits,
+					to_char(rdate,'yyyy/mm/dd') rdate,
+					to_char(udate, 'yyyy/mm/dd') udate
+			FROM nboard 
+				WHERE unq = #unq#
+			]]>
+	</select>
+
+
+
+
+
+
+	
+	<update id="nboardDAO.updateNBoard">
+		<![CDATA[
+		UPDATE nboard SET 	title = #title#, 
+							name = #name#,
+							content = #content#, 
+							udate = sysdate
+		WHERE unq = #unq#
+		]]>
+	</update>
+	
+	<update id="nboardDAO.updateNBoardHits">
+		<![CDATA[
+		UPDATE nboard SET 	hits = hits+1
+		WHERE unq = #unq#
+		]]>
+	
+	</update>
+
+
+
+
+
+	<delete id="nboardDAO.deleteNBoard">
+		<![CDATA[
+		DELETE FROM nboard where unq = #unq#
+		]]>
+	</delete>
+
+	
+	<delete id="nboardDAO.deleteNBoardAll">
+		<![CDATA[
+		DELETE FROM nboard where unq IN($datas$)
+		]]>
+	</delete>
+	
+
+</sqlMap>
