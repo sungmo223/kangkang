@@ -1,7 +1,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"  uri="http://java.sun.com/jsp/jstl/core" %>
+
  
 <!DOCTYPE html>
 <html>
@@ -25,16 +25,6 @@
   			$("#title").focus();
   			return false;
   		}
-  		if($("#pass").val() == "" ) {
-  			alert("암호를 입력해 주세요.");
-  			$("#pass").focus();
-  			return false;
-  		}
-  		if($("#name").val() == "" ) {
-  			alert("이름을 입력해 주세요.");
-  			$("#name").focus();
-  			return false;
-  		}
   		if($("#content").val() == "" ) {
   			alert("내용을 입력해 주세요.");
   			$("#content").focus();
@@ -53,7 +43,7 @@
   				if(data == "ok") {
   					alert("저장성공");
   					location="reviewBoardList.do";
-  				} else {
+  				}else {
   					alert("저장실패");
   				}
   				
@@ -71,7 +61,7 @@
 </script>
 </head>
 
-<body onload="document.frm.title.focus()">
+<body>
 
 <div class="container">
 	<div class="top">
@@ -103,33 +93,13 @@
 				<th>제목</th>
 				<td>
 					<input type="text" name="title" id="title"
-							style="width:98%;" placeholder="제목을 입력해주세요." autofocus >
-				</td>
-			</tr>
-			<tr>
-				<th>암호</th>
-				<td>
-					<input type="password" name="pass" id="pass" value="" 
-							style="width::50%;" placeholder="암호를 입력해주세요.">
+							style="width:98%;">
 				</td>
 			</tr>
 			<tr>
 				<th>이름</th>
 				<td>
-					<input type="text" name="name" id="name" value="" 
-								style="width::50%;" placeholder="이름을 입력해주세요.">
-				</td>
-			</tr>
-			<tr>
-				<th>이메일</th>
-				<td>
-					<input type="email" name="email" id="email" value="" style="width:98%;">
-				</td>
-			</tr>
-			<tr>
-				<th>SNS</th>
-				<td>
-					<input type="text" name="sns" id="sns" value="" style="width:98%;" >
+					<input type="text" name="name" id="name" value="">
 				</td>
 			</tr>
 			<tr>

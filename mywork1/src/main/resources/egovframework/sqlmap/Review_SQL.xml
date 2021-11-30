@@ -2,179 +2,27 @@
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
 <sqlMap namespace="reviewboard_space" >
 
+
 <typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
-<typeAlias  alias="reviewVO" type="egov.service.ReviewVO"/>	
+<typeAlias  alias="reviewVO" type="egov.service.ReviewVO"/>
 
+	<select id = "reviewDAO.selectReviewList" resultClass = "egovMap">
 	
-	<insert id="reviewDAO.insertReview">
-		
-		INSERT INTO review_board 
-							(unq, 
-							title, 
-							pass, 
-							name, 
-							content, 
-							rdate, 
-							udate,
-							email,
-							sns ) VALUES 
-						(	review_board_seq.nextval, 
-							#title#, 
-							#pass#, 
-							#name#, 
-							#content#,  
-							sysdate, 
-							sysdate,
-							#email#,
-							#sns#)
-	
-	</insert>
-	
-	<insert id="reviewDAO.insertComment">
-		INSERT INTO review_comment (unq,
-								  	p_unq,
-								  	pass,
-								  	comment1,
-									rdate,
-									name,
-									mark					
-									) VALUES (	review_comment_seq.nextval,
-											  	#p_unq#,
-											  	#pass#,
-											  	#comment1#,
-												sysdate,
-												#name#,
-												#mark#	) 
-	</insert>
-	
-	<select id="reviewDAO.selectReviewList" resultClass="egovMap">
-			
-				
-		SELECT b.* FROM (	
-			SELECT rownum rn, a.* fROM(	
-				SELECT 	unq,
-								title,
-								name,
-								hits,
-								to_char(rdate,'yyyy/mm/dd') rdate,
-								(select count(*) from review_comment
-                                        		where p_unq = r.unq) commcnt
-						FROM
-							 review_board r
-						
-						WHERE title IS NOT NULL
-						ORDER BY 
-							unq DESC ) a ) b
-		WHERE 
-			rn between $s_no$ AND $e_no$
-			
-						
-		
-	</select>
-
-	<select id="reviewDAO.selectReviewTotal" resultClass="java.lang.Integer">
-	
-		SELECT count(*) FROM review_board
-	
-	</select>
-	
-	<select id ="reviewDAO.selectReviewboardDetail" resultClass="reviewVO" >
-		SELECT 	unq,
-				title, 
-				name, 
-				email, 
-				sns, 
-				content,
-				to_char(rdate, 'yyyy/mm/dd') rdate, 
-				to_char(udate, 'yyyy/mm/dd') udate, 
-				hits,
-				(select count(*) from review_comment
-                          		where p_unq = #unq#) commcnt
-						
-			FROM 
+		SELECT  unq,
+			    title,
+			    pass,
+			    name,
+			    hits,
+			    rdate,
+			    udate,
+			    email,
+			    sns
+		FROM
 				review_board
-			WHERE 
-				unq = #unq#
-
+	
+	
+	
+	
 	</select>
-	
-	<select id = "reviewDAO.selectReviewPass" resultClass="java.lang.Integer">
-		 SELECT 
-		 		count(*) 
-		 FROM 
-		 		review_board 
-		 WHERE 
-		 		unq = #unq# and pass =#pass#
-	</select>
-	
-	
-
-	<select id="reviewDAO.selectCommentList" resultClass="egovMap">
-		SELECT 	unq, 
-				p_unq, 
-				comment1, 
-				name, 
-				mark,
-				decode(mark,'5','아주좋음','4','좋음','3','보통','2','나쁨','1','아주나쁨') markmsg
-		FROM 
-				review_comment
-		WHERE
-				p_unq = #p_unq#
-		
-	</select>
-
-	<select id="reviewDAO.selectCommentPass" resultClass="java.lang.Integer">
-		SELECT 	
-				count(*) 
-		FROM 	
-				review_comment 
-		WHERE	
-				unq = #unq# AND pass = #pass#
-	</select>
-	
-	<update id="reviewDAO.updateComment">
-		UPDATE 	review_comment
-			SET			
-				comment1 = #comment1#,
-				name = #name#,
-				mark = #mark#
-			WHERE 		
-				unq = #unq#
-	
-	</update>
-	
-	<update id="reviewDAO.updateReviewboardHits">
-		UPDATE  review_board  SET  hits=hits+1  WHERE  unq=#unq#
-	</update>
-
-	<update id="reviewDAO.updateReviewboard">
-		UPDATE 
-					review_board 
-			SET
-					title = #title#, 
-					name = #name#, 
-					content =#content#, 
-					udate = sysdate,
-					email = #email#,
-					sns = #sns#
-				
-			WHERE unq=#unq#
-	</update>
-
-	<delete id ="reviewDAO.deleteComment">
-		DELETE FROM review_comment WHERE unq = #unq#
-	</delete>
-	
-	<delete id ="reviewDAO.deleteCommentALL">
-		DELETE FROM review_comment WHERE p_unq = #p_unq#
-	</delete>
-	
-	<delete id="reviewDAO.deleteReviewboard">
-		DELETE FROM review_board WHERE unq=#unq#
-	</delete>
-
-
-
-
 
 </sqlMap>

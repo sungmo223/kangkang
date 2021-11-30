@@ -9,9 +9,8 @@
 <head>
 <meta charset="UTF-8">
 <title>관리자화면</title>
-
-</head>
 <link rel="stylesheet" href="<c:url value='/css/admin_layout.css'/>">
+</head>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -142,7 +141,7 @@ $(function(){
 		</div>
 		
 		<div style="float:left; text-align:left; width:300px; margin-left:15px;">
-			총 검색 개수 : ${vo.total }
+			총 검색 개수 : ${total }
 		</div>
 		<div style="float:left;text-align:right; width:450px;">
 			<form name="frm" method="post" action="reviewBoardList.do">
@@ -176,7 +175,7 @@ $(function(){
 				<col width="10%" />
 				<col width="17%" />
 				<col width="5%" />
-				
+				<col width="7%" />
 				
 			</colgroup>
 			<tr>
@@ -186,21 +185,19 @@ $(function(){
 				<th>글쓴이</th>
 				<th>등록일</th>
 				<th>조회수</th>
-				
+				<th>삭제</th>
 			</tr>
-			<c:set var="rownum" value="${vo.rownum }" />						
 			<c:forEach var="result" items="${list }">
 			<tr>
 				<td><input type="checkbox" id="chk" name="chk" value="${result.unq }"></td>
 				<td>${rownum }</td>
 				<td style="text-align:left;">
-					<a href="reviewBoardDetail.do?unq=${result.unq }&s_field=${s_field}&s_text=${s_text}">
-						${result.title } (${result.commcnt})</a>
-						
+	<a href="reviewBoardDetail.do?unq=${result.unq }">${result.title }</a>
 				</td>
 				<td>${result.name }</td>
 				<td>${result.rdate }</td>
 				<td>${result.hits }</td>
+				<td><a href="javascript:fn_delete('${result.unq }')">del</a></td>
 			</tr>
 			
 			<c:set var="rownum" value="${rownum-1 }" />		
@@ -209,8 +206,8 @@ $(function(){
 		</table>
 		</div>
 		<div style="margin-top:10px;">
-			<c:forEach var="i" begin="1" end="${vo.total_page }">
-				<a href="reviewBoardList.do?page_no=${i }&s_field=${s_field}&s_text=${s_text}">${i }</a>
+			<c:forEach var="i" begin="1" end="${total_page }">
+	<a href="reviewBoardList.do?page_no=${i }&s_field=${s_field}&s_text=${s_text}">${i }</a>
 			</c:forEach>
 		</div>
 		<div style="margin-top:10px; width:100%; text-align:left; margin-left:15px;">
