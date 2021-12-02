@@ -25,4 +25,31 @@
 	
 	</select>
 
+
+	<insert id = "reviewDAO.insertReview">
+	
+		INSERT INTO review_board (  unq,
+								    title,
+								    pass,
+								    name,
+								    content,
+								    rdate,
+								    udate,
+								    email,
+								    sns	    )  VALUES (
+								    
+								    review_board_seq.nextval,
+								    #title#,
+								    #pass#,
+								    #name#,
+								    #content#,
+								    sysdate,
+								    sysdate,
+								    #email#,
+								    #sns#    )
+		
+		
+	</insert>
+
+
 </sqlMap>

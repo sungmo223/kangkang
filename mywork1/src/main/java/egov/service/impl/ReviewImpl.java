@@ -22,4 +22,11 @@ public class ReviewImpl implements ReviewService{
 		return reviewDAO.selectReviewList(vo);
 	}
 
+
+	@Override
+	public String insertReview(ReviewVO vo) throws Exception {
+		
+		return reviewDAO.insertReview(vo);
+	}
+
 }

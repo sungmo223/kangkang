@@ -8,8 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title>이용후기 글쓰기</title>
-<link rel="stylesheet" href="<c:url value='/css/admin_layout.css'/>">
-
+<link rel="stylesheet" href="css/admin_layout.css">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -25,19 +24,24 @@
   			$("#title").focus();
   			return false;
   		}
+  		if($("#pass").val() == "" ) {
+  			alert("암호를 입력해주세요.");
+  			$("#pass").focus();
+  			return false;
+  		}
   		if($("#content").val() == "" ) {
   			alert("내용을 입력해 주세요.");
   			$("#content").focus();
   			return false;
   		}
-  		
+  		// {"a1":"ok", "a2":"aaa"}
   		var formdata = $("#frm").serialize();
   		$.ajax({
   			type : "post",
   			url  : "reviewBoardWriteSave.do",
   			data : formdata,
   			
-  			datatype : "text",  //성공여부 ( ok )
+  			datatype : "json",  //성공여부 ( ok )
   			success : function(data) {
   				
   				if(data == "ok") {
@@ -93,13 +97,34 @@
 				<th>제목</th>
 				<td>
 					<input type="text" name="title" id="title"
-							style="width:98%;">
+							style="width:98%;" placeholder = "제목을 입력해주세요." autofocus>
+				</td>
+			</tr>
+			<!-- autofocus대신 위에 <body onload = "document.frm.title.focus()"> 해도 됨-->
+			<tr>
+				<th>암호</th>
+				<td>
+					<input type="password" name="pass" id="pass"
+							 style="width:50%" placeholder = "암호를 입력해주세요.">
 				</td>
 			</tr>
 			<tr>
 				<th>이름</th>
 				<td>
-					<input type="text" name="name" id="name" value="">
+					<input type="text" name="name" id="name" 
+							style="width:50%" placeholder = "이름을 입력해주세요.">
+				</td>
+			</tr>
+			<tr>
+				<th>이메일</th>
+				<td>
+					<input type="email" name="email" id="email" style="width:50%">
+				</td>
+			</tr>
+			<tr>
+				<th>SNS주소</th>
+				<td>
+					<input type="text" name="sns" id="sns" style="width:50%">
 				</td>
 			</tr>
 			<tr>

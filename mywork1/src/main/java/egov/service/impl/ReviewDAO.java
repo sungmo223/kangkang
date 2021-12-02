@@ -15,4 +15,8 @@ public class ReviewDAO extends EgovAbstractDAO{
 		return list("reviewDAO.selectReviewList",vo);
 	}
 
+	public String insertReview(ReviewVO vo) {
+		return (String) insert("reviewDAO.insertReview",vo);
+	}
+
 }
